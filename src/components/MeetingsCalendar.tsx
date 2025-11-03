@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-reac
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
+import { motion } from 'motion/react';
 
 interface CalendarMeeting {
   id: string;
@@ -119,7 +120,7 @@ export function MeetingsCalendar({ onSelectMeeting }: MeetingsCalendarProps) {
   const today = 2; // November 2nd is today
 
   return (
-    <div className="flex-1 bg-gray-950 p-6 overflow-y-auto">
+    <div className="h-full bg-gray-950 p-6 overflow-y-auto">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Calendar Header */}
         <div className="flex items-center justify-between">
@@ -192,32 +193,42 @@ export function MeetingsCalendar({ onSelectMeeting }: MeetingsCalendarProps) {
                         )}
                       </div>
                       <div className="space-y-1">
-                        {dayMeetings.map((meeting) => (
-                          <Card
+                        {dayMeetings.map((meeting, idx) => (
+                          <motion.div
                             key={meeting.id}
-                            className="p-2 cursor-pointer border-l-2 hover:bg-gray-800 transition-colors"
-                            style={{ 
-                              borderLeftColor: meeting.color,
-                              backgroundColor: `${meeting.color}15`
-                            }}
-                            onClick={() => onSelectMeeting?.(meeting.id)}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: idx * 0.1 }}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                           >
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-1">
-                                <div 
-                                  className="w-1.5 h-1.5 rounded-full"
-                                  style={{ backgroundColor: meeting.color }}
-                                />
-                                <span className="text-xs text-white">{meeting.time}</span>
+                            <Card
+                              className="p-2 cursor-pointer border-l-2 hover:bg-gray-800 transition-colors"
+                              style={{ 
+                                borderLeftColor: meeting.color,
+                                backgroundColor: `${meeting.color}15`
+                              }}
+                              onClick={() => onSelectMeeting?.(meeting.id)}
+                            >
+                              <div className="space-y-1">
+                                <div className="flex items-center gap-1">
+                                  <motion.div 
+                                    className="w-1.5 h-1.5 rounded-full"
+                                    style={{ backgroundColor: meeting.color }}
+                                    animate={{ scale: [1, 1.3, 1] }}
+                                    transition={{ repeat: Infinity, duration: 2 }}
+                                  />
+                                  <span className="text-xs text-white">{meeting.time}</span>
+                                </div>
+                                <p className="text-xs text-gray-300 line-clamp-1">
+                                  {meeting.subject}
+                                </p>
+                                <p className="text-xs text-gray-500 truncate">
+                                  {meeting.employeeName}
+                                </p>
                               </div>
-                              <p className="text-xs text-gray-300 line-clamp-1">
-                                {meeting.subject}
-                              </p>
-                              <p className="text-xs text-gray-500 truncate">
-                                {meeting.employeeName}
-                              </p>
-                            </div>
-                          </Card>
+                            </Card>
+                          </motion.div>
                         ))}
                       </div>
                     </>
@@ -259,12 +270,18 @@ export function MeetingsCalendar({ onSelectMeeting }: MeetingsCalendarProps) {
               .filter(m => m.day >= today)
               .sort((a, b) => a.day - b.day)
               .slice(0, 6)
-              .map((meeting) => (
-                <Card 
-                  key={meeting.id} 
-                  className="bg-gray-900 border-gray-800 p-4 hover:bg-gray-800 transition-colors cursor-pointer"
-                  onClick={() => onSelectMeeting?.(meeting.id)}
+              .map((meeting, idx) => (
+                <motion.div
+                  key={meeting.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 >
+                  <Card 
+                    className="bg-gray-900 border-gray-800 p-4 hover:bg-gray-800 hover:shadow-lg transition-all cursor-pointer"
+                    onClick={() => onSelectMeeting?.(meeting.id)}
+                  >
                   <div className="flex items-start gap-3">
                     <div 
                       className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
@@ -283,6 +300,7 @@ export function MeetingsCalendar({ onSelectMeeting }: MeetingsCalendarProps) {
                     </div>
                   </div>
                 </Card>
+                </motion.div>
               ))}
           </div>
         </div>

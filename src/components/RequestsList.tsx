@@ -128,7 +128,7 @@ export function RequestsList({ onSelectRequest, selectedRequestId }: RequestsLis
   });
 
   return (
-    <div className="flex-1 bg-gray-950 p-6 overflow-y-auto">
+    <div className="h-full bg-gray-950 p-6 overflow-y-auto">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div>

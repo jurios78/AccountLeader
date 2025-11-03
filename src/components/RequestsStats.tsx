@@ -1,6 +1,7 @@
 import { Clock, CheckCircle, XCircle, Calendar, TrendingUp } from 'lucide-react';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
+import { motion } from 'motion/react';
 
 export function RequestsStats() {
   const stats = [
@@ -55,22 +56,39 @@ export function RequestsStats() {
             {stats.map((stat, index) => {
               const Icon = stat.icon;
               return (
-                <Card 
-                  key={index} 
-                  className={`bg-gray-900 border p-4 ${stat.borderColor}`}
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.3 }}
+                  whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-                        <Icon className={`h-5 w-5 ${stat.color}`} />
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-400">{stat.label}</p>
-                        <p className="text-2xl text-white mt-1">{stat.value}</p>
+                  <Card 
+                    className={`bg-gray-900 border p-4 ${stat.borderColor} cursor-pointer hover:shadow-lg transition-shadow`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <motion.div 
+                          className={`p-2 rounded-lg ${stat.bgColor}`}
+                          whileHover={{ rotate: 360, transition: { duration: 0.5 } }}
+                        >
+                          <Icon className={`h-5 w-5 ${stat.color}`} />
+                        </motion.div>
+                        <div>
+                          <p className="text-sm text-gray-400">{stat.label}</p>
+                          <motion.p 
+                            className="text-2xl text-white mt-1"
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: index * 0.1 + 0.2, type: 'spring' }}
+                          >
+                            {stat.value}
+                          </motion.p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Card>
+                  </Card>
+                </motion.div>
               );
             })}
           </div>
@@ -108,29 +126,36 @@ export function RequestsStats() {
           <h2 className="text-white mb-4">Последняя активность</h2>
           <div className="space-y-2">
             {recentActivity.map((activity, index) => (
-              <Card 
-                key={index} 
-                className="bg-gray-900 border-gray-800 p-3 hover:bg-gray-800 transition-colors cursor-pointer"
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 + index * 0.1, duration: 0.3 }}
+                whileHover={{ x: 5 }}
               >
-                <div className="space-y-1">
-                  <p className="text-sm text-gray-300">{activity.employee}</p>
-                  <div className="flex items-center justify-between">
-                    <Badge 
-                      variant="outline"
-                      className={`text-xs ${
-                        activity.type === 'new' 
-                          ? 'border-blue-500 text-blue-500'
-                          : activity.type === 'approved'
-                          ? 'border-green-500 text-green-500'
-                          : 'border-gray-500 text-gray-500'
-                      }`}
-                    >
-                      {activity.action}
-                    </Badge>
-                    <span className="text-xs text-gray-500">{activity.time}</span>
+                <Card 
+                  className="bg-gray-900 border-gray-800 p-3 hover:bg-gray-800 transition-colors cursor-pointer"
+                >
+                  <div className="space-y-1">
+                    <p className="text-sm text-gray-300">{activity.employee}</p>
+                    <div className="flex items-center justify-between">
+                      <Badge 
+                        variant="outline"
+                        className={`text-xs ${
+                          activity.type === 'new' 
+                            ? 'border-blue-500 text-blue-500 animate-pulse'
+                            : activity.type === 'approved'
+                            ? 'border-green-500 text-green-500'
+                            : 'border-gray-500 text-gray-500'
+                        }`}
+                      >
+                        {activity.action}
+                      </Badge>
+                      <span className="text-xs text-gray-500">{activity.time}</span>
+                    </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>

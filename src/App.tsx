@@ -7,6 +7,7 @@ import { MeetingsCalendar } from './components/MeetingsCalendar';
 import { Toaster } from './components/ui/sonner';
 import { Tabs, TabsList, TabsTrigger } from './components/ui/tabs';
 import { List, Calendar } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface Request {
   id: string;
@@ -61,22 +62,53 @@ export default function App() {
         <RequestsStats />
 
         {/* Center Content - Switch between List and Calendar */}
-        {view === 'list' ? (
-          <RequestsList 
-            onSelectRequest={setSelectedRequest} 
-            selectedRequestId={selectedRequest?.id}
-          />
-        ) : (
-          <MeetingsCalendar 
-            onSelectMeeting={(id) => {
-              // Здесь можно добавить логику для выбора встречи
-              console.log('Selected meeting:', id);
-            }}
-          />
-        )}
+        <AnimatePresence mode="wait">
+          {view === 'list' ? (
+            <motion.div
+              key="list"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.3 }}
+              className="flex-1 overflow-hidden"
+            >
+              <RequestsList 
+                onSelectRequest={setSelectedRequest} 
+                selectedRequestId={selectedRequest?.id}
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="calendar"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.3 }}
+              className="flex-1 overflow-hidden"
+            >
+              <MeetingsCalendar 
+                onSelectMeeting={(id) => {
+                  // Здесь можно добавить логику для выбора встречи
+                  console.log('Selected meeting:', id);
+                }}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Right Details Panel - Only show in list view */}
-        {view === 'list' && <RequestDetails request={selectedRequest} />}
+        <AnimatePresence>
+          {view === 'list' && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <RequestDetails request={selectedRequest} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Toast Notifications */}

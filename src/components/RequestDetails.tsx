@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback } from './ui/avatar';
 import { Separator } from './ui/separator';
 import { Textarea } from './ui/textarea';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -58,13 +59,22 @@ export function RequestDetails({ request }: RequestDetailsProps) {
   if (!request) {
     return (
       <div className="w-96 bg-gray-950 border-l border-gray-800 p-6 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-4">
+        <motion.div 
+          className="text-center"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.div 
+            className="w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center mx-auto mb-4"
+            animate={{ rotate: [0, 10, -10, 0] }}
+            transition={{ repeat: Infinity, duration: 3 }}
+          >
             <MessageSquare className="h-8 w-8 text-gray-600" />
-          </div>
+          </motion.div>
           <p className="text-gray-500">Выберите заявку</p>
           <p className="text-sm text-gray-600 mt-1">для просмотра деталей</p>
-        </div>
+        </motion.div>
       </div>
     );
   }
@@ -102,7 +112,12 @@ export function RequestDetails({ request }: RequestDetailsProps) {
   return (
     <>
       <div className="w-96 bg-gray-950 border-l border-gray-800 p-6 overflow-y-auto">
-        <div className="space-y-6">
+        <motion.div 
+          className="space-y-6"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3 }}
+        >
           {/* Header */}
           <div>
             <Badge className={`mb-4 ${statusConfig[request.status].color}`}>
@@ -113,7 +128,12 @@ export function RequestDetails({ request }: RequestDetailsProps) {
           </div>
 
           {/* Employee Info */}
-          <Card className="bg-gray-900 border-gray-800 p-4">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Card className="bg-gray-900 border-gray-800 p-4">
             <div className="flex items-start gap-3 mb-4">
               <Avatar className="h-12 w-12">
                 <AvatarFallback className="bg-blue-600 text-white">
@@ -137,9 +157,15 @@ export function RequestDetails({ request }: RequestDetailsProps) {
               </div>
             </div>
           </Card>
+          </motion.div>
 
           {/* Meeting Details */}
-          <Card className="bg-gray-900 border-gray-800 p-4">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Card className="bg-gray-900 border-gray-800 p-4">
             <h3 className="text-white mb-4">Детали встречи</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-3">
@@ -162,16 +188,28 @@ export function RequestDetails({ request }: RequestDetailsProps) {
               </div>
             </div>
           </Card>
+          </motion.div>
 
           {/* Description */}
-          <Card className="bg-gray-900 border-gray-800 p-4">
-            <h3 className="text-white mb-3">Описание вопроса</h3>
-            <p className="text-gray-300 text-sm leading-relaxed">{request.description}</p>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <Card className="bg-gray-900 border-gray-800 p-4">
+              <h3 className="text-white mb-3">Описание вопроса</h3>
+              <p className="text-gray-300 text-sm leading-relaxed">{request.description}</p>
+            </Card>
+          </motion.div>
 
           {/* Actions */}
           {request.status === 'pending' && (
-            <div className="space-y-3">
+            <motion.div 
+              className="space-y-3"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
               <Button 
                 className="w-full bg-green-600 hover:bg-green-700 text-white"
                 onClick={handleApprove}
@@ -194,18 +232,24 @@ export function RequestDetails({ request }: RequestDetailsProps) {
                 <XCircle className="h-4 w-4 mr-2" />
                 Отклонить заявку
               </Button>
-            </div>
+            </motion.div>
           )}
 
           {request.status === 'approved' && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
             <Card className="bg-green-500/10 border-green-500/20 p-4">
               <div className="flex items-center gap-3">
                 <CheckCircle className="h-5 w-5 text-green-500" />
                 <p className="text-sm text-green-500">Встреча подтверждена и добавлена в календарь</p>
               </div>
             </Card>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       </div>
 
       {/* Reject Dialog */}

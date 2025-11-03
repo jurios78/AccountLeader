@@ -2,6 +2,7 @@ import { Clock, User, Calendar, AlertCircle } from 'lucide-react';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
 import { Avatar, AvatarFallback } from './ui/avatar';
+import { motion } from 'motion/react';
 
 interface RequestCardProps {
   request: {
@@ -38,14 +39,21 @@ export function RequestCard({ request, isSelected, onClick }: RequestCardProps) 
   };
 
   return (
-    <Card 
-      className={`bg-gray-900 border p-4 cursor-pointer transition-all ${
-        isSelected 
-          ? 'border-blue-500 bg-gray-800' 
-          : 'border-gray-800 hover:bg-gray-800 hover:border-gray-700'
-      }`}
-      onClick={onClick}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+      whileTap={{ scale: 0.98 }}
     >
+      <Card 
+        className={`bg-gray-900 border p-4 cursor-pointer transition-all ${
+          isSelected 
+            ? 'border-blue-500 bg-gray-800 shadow-lg shadow-blue-500/20' 
+            : 'border-gray-800 hover:bg-gray-800 hover:border-gray-700 hover:shadow-lg'
+        }`}
+        onClick={onClick}
+      >
       <div className="space-y-3">
         {/* Header */}
         <div className="flex items-start justify-between gap-3">
@@ -92,5 +100,6 @@ export function RequestCard({ request, isSelected, onClick }: RequestCardProps) 
         </div>
       </div>
     </Card>
+    </motion.div>
   );
 }
