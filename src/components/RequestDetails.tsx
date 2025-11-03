@@ -111,13 +111,8 @@ export function RequestDetails({ request }: RequestDetailsProps) {
 
   return (
     <>
-      <div className="w-96 bg-gray-950 border-l border-gray-800 p-6 overflow-y-auto">
-        <motion.div 
-          className="space-y-6"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3 }}
-        >
+      <div className="w-96 h-full bg-gray-950 border-l border-gray-800 p-6 overflow-y-auto">
+        <div className="space-y-6">
           {/* Header */}
           <div>
             <Badge className={`mb-4 ${statusConfig[request.status].color}`}>
@@ -249,7 +244,7 @@ export function RequestDetails({ request }: RequestDetailsProps) {
             </Card>
             </motion.div>
           )}
-        </motion.div>
+        </div>
       </div>
 
       {/* Reject Dialog */}
